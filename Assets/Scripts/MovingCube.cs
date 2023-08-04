@@ -12,6 +12,15 @@ public class MovingCube : MonoBehaviour
 
     [SerializeField]
     public float moveSpeed = 1f;
+
+    private void Awake()
+    {
+        if (GameManager.Instance.isGameStarted == false)
+        {
+            LastCube = null;
+            CurrentCube = null;
+        }
+    }
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);

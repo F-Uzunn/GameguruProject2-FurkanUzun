@@ -11,11 +11,13 @@ public class PlayerManager : MonoBehaviour
     {
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
         EventManager.AddHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.AddHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
         EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
     void Start()
     {
@@ -25,6 +27,11 @@ public class PlayerManager : MonoBehaviour
     void OnStartNewLevel()
     {
         AnimSet("run");
+    }
+
+    void OnCreateNewLevel()
+    {
+        AnimSet("idle");
     }
 
     void OnPassFinishLine()

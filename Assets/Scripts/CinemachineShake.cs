@@ -17,7 +17,7 @@ public class CinemachineShake : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.AddHandler(GameEvent.OnPerfectTiming, OnPerfectTiming);
+        EventManager.RemoveHandler(GameEvent.OnPerfectTiming, OnPerfectTiming);
     }
  
 

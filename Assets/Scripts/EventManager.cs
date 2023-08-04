@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public enum GameEvent
 {
-
+    OnSpawnCube,
+    OnGameOver
 }
 public static class EventManager
 {

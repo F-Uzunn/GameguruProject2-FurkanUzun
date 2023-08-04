@@ -22,28 +22,40 @@ public class MovingCube : MonoBehaviour
         CurrentCube = this;
 
         transform.localScale = new Vector3(LastCube.transform.localScale.x, LastCube.transform.localScale.y, transform.localScale.z);
-
     }
+
+    private void GameOver()
+    {
+        Debug.Log("gameOver");
+        LastCube = null;
+        CurrentCube = null;
+        this.gameObject.AddComponent<Rigidbody>();
+        Destroy(this.gameObject, 1f);
+    }
+
     internal void Stop()
     {
         moveSpeed = 0f;
         float leftOverMargin = transform.position.x - LastCube.transform.position.x;
 
-        if (Mathf.Abs(leftOverMargin) >= LastCube.transform.localScale.x)
-        {
-            Debug.Log("gameOver");
-            LastCube = null;
-            CurrentCube = null;
-            GameManager.Instance.isGameOver = true;
-            this.gameObject.AddComponent<Rigidbody>();
-            Destroy(this.gameObject, 1f);
+        if (CheckIfGameOver(leftOverMargin))
             return;
-        }
 
         float direction = leftOverMargin > 0 ? 1f : -1f;
         SplitCubeOnX(leftOverMargin, direction);
 
         LastCube = GetComponent<MovingCube>();
+    }
+
+    private bool CheckIfGameOver(float leftOverMargin)
+    {
+        if (Mathf.Abs(leftOverMargin) >= LastCube.transform.localScale.x)
+        {
+            GameOver();
+            EventManager.Broadcast(GameEvent.OnGameOver);
+            return true;
+        }
+        return false;
     }
 
     private void SplitCubeOnX(float leftOverMargin, float direction)

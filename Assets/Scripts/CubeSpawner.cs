@@ -12,7 +12,16 @@ public class CubeSpawner : MonoBehaviour
     private MoveDirection moveDirection;
     private int posX;
 
-    public void SpawnCube()
+    private void OnEnable()
+    {
+        EventManager.AddHandler(GameEvent.OnSpawnCube,OnSpawnCube);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.RemoveHandler(GameEvent.OnSpawnCube,OnSpawnCube);
+    }
+    public void OnSpawnCube()
     {
         var cube = Instantiate(cubePrefab, parent);
 

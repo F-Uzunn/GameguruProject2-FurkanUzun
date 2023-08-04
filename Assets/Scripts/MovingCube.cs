@@ -9,6 +9,7 @@ public class MovingCube : MonoBehaviour
     public static MovingCube LastCube { get; private set; }
     public MoveDirection MoveDirection { get; set; }
 
+
     [SerializeField]
     private float moveSpeed = 1f;
     private void OnEnable()
@@ -37,6 +38,7 @@ public class MovingCube : MonoBehaviour
     {
         moveSpeed = 0f;
         float leftOverMargin = transform.position.x - LastCube.transform.position.x;
+      
 
         if (CheckIfGameOver(leftOverMargin))
             return;
@@ -67,6 +69,14 @@ public class MovingCube : MonoBehaviour
         transform.localScale = new Vector3(newZSize, transform.localScale.y, transform.localScale.z);
         transform.position = new Vector3(newZPosition, transform.position.y, transform.position.z);
 
+        if ((leftOverMargin <= 0.1f && leftOverMargin>=0f) || (leftOverMargin >=-0.1f && leftOverMargin<=0))
+        {
+            transform.localScale = new Vector3(LastCube.transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            transform.position = new Vector3(LastCube.transform.position.x, transform.position.y, transform.position.z);
+            Debug.Log("perfect timing");
+            return;
+        }
+
         float cubeEdge = transform.position.x + (newZSize / 2f * direction);
         float fallingBlockZPosition = cubeEdge + fallingBlockSize / 2f * direction;
 
@@ -88,6 +98,7 @@ public class MovingCube : MonoBehaviour
     private void SpawnFallingCube(float fallingBlockZPosisiton, float fallingBlockSize)
     {
         var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
         cube.transform.localScale = new Vector3(fallingBlockSize, transform.localScale.y, transform.localScale.z);
         cube.transform.position = new Vector3(fallingBlockZPosisiton, transform.position.y, transform.position.z);
 

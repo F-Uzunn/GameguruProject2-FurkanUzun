@@ -12,6 +12,8 @@ public class CubeSpawner : MonoBehaviour
     private MoveDirection moveDirection;
     private int posX;
 
+    public List<Material> cubeMaterialList;
+
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnSpawnCube,OnSpawnCube);
@@ -24,6 +26,8 @@ public class CubeSpawner : MonoBehaviour
     public void OnSpawnCube()
     {
         var cube = Instantiate(cubePrefab, parent);
+        cube.GetComponent<Renderer>().material = cubeMaterialList[Random.Range(0, cubeMaterialList.Count)];
+        EventManager.Broadcast(GameEvent.OnAddStackToMoveList, cube.gameObject);
 
         if(MovingCube.LastCube != null)
         {

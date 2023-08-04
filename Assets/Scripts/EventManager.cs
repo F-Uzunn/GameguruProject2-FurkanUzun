@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public enum GameEvent
 {
     OnSpawnCube,
-    OnGameOver
+    OnGameOver,
+    OnAddStackToMoveList
 }
 public static class EventManager
 {

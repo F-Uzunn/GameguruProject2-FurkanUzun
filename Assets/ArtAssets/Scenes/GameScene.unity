@@ -2279,6 +2279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveList: []
+  moveIndex: 0
   speed: 1
   moveForward: 0
 --- !u!54 &604125044

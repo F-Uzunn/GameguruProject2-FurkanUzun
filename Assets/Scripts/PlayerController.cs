@@ -6,6 +6,7 @@ using DG.Tweening;
 public class PlayerController : MonoBehaviour
 {
     public List<Transform> moveList;
+    [SerializeField]
     private int moveIndex;
 
     [SerializeField]
@@ -53,37 +54,33 @@ public class PlayerController : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.GetChild(0).localRotation = targetRotation;
 
-        if (moveForward)
+        if (GameManager.Instance.isGameStarted)
         {
             transform.position += transform.forward * Time.deltaTime * speed;
-            return;
         }
 
         if (moveList.Count == 0)
             return;
 
-        if (moveList[moveIndex] != null)
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(moveList[moveIndex].transform.position.x, transform.position.y, moveList[moveIndex].transform.position.z), speed * Time.deltaTime);
-        else
-            moveForward = true;
+        Debug.Log(GetDistance());
 
-        if (GetDistance() < 0.75f)
+        if (GetDistance() < 2.75f)
         {
-            if (moveList.Count - 1 == moveIndex)
+            if (moveList[moveIndex].GetComponent<MovingCube>() != MovingCube.CurrentCube)
             {
-                moveForward = true;
-                return;
+                transform.DOMoveX(moveList[moveIndex].transform.position.x, 0.1f);
+                if (moveList.Count != moveIndex+1)
+                    moveIndex++;
             }
-            moveIndex++;
         }
     }
     float GetDistance()
     {
         if (moveList[moveIndex] != null)
         {
-            float distance = Vector3.Distance(transform.position, moveList[moveIndex].position);
+            float distance = Vector3.Distance(transform.position, moveList[moveIndex].position + new Vector3(0, 0, -1));
             return distance;
         }
-        return 0;
+        return 100;
     }
 }

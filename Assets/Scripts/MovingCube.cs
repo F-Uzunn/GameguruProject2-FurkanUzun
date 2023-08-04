@@ -15,18 +15,36 @@ public class MovingCube : MonoBehaviour
         if (LastCube == null)
             LastCube = GameObject.Find("Base").GetComponent<MovingCube>();
 
-        if (LastCube == GetComponent<MovingCube>())
+        if (LastCube.gameObject == GetComponent<MovingCube>().gameObject)
             return;
 
         CurrentCube = this;
+
+        Debug.Log(CurrentCube.gameObject.name);
+
+        transform.localScale = new Vector3(LastCube.transform.localScale.x,LastCube.transform.localScale.y,transform.localScale.z);
+
     }
     internal void Stop()
     {
         moveSpeed = 0f;
         float leftOverMargin = transform.position.x - LastCube.transform.position.x;
 
+        if(Mathf.Abs(leftOverMargin) >= LastCube.transform.localScale.x)
+        {
+            Debug.Log("gameOver");
+            LastCube = null;
+            CurrentCube = null;
+            GameManager.Instance.isGameOver = true;
+            this.gameObject.AddComponent<Rigidbody>();
+            Destroy(this.gameObject, 1f);
+            return;
+        }
+
         float direction = leftOverMargin > 0 ? 1f:-1f;
         SplitCubeOnX(leftOverMargin,direction);
+
+        LastCube = GetComponent<MovingCube>();
     }
 
     private void SplitCubeOnX(float leftOverMargin,float direction)
@@ -46,6 +64,11 @@ public class MovingCube : MonoBehaviour
     private void Update()
     {
         transform.position += transform.right * Time.deltaTime * moveSpeed;
+
+        if (LastCube != null)
+        {
+            float leftOverMargin = transform.position.x - LastCube.transform.position.x;
+        }
     }
 
     private void SpawnFallingCube(float fallingBlockZPosisiton,float fallingBlockSize)

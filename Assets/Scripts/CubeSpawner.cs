@@ -8,15 +8,21 @@ public class CubeSpawner : MonoBehaviour
     private MovingCube cubePrefab;
     [SerializeField]
     private Transform parent;
+    [SerializeField]
+    private MoveDirection moveDirection;
+    private int posX;
 
     public void SpawnCube()
     {
-        var cube = Instantiate(cubePrefab,parent);
+        var cube = Instantiate(cubePrefab, parent);
 
-        if (MovingCube.LastCube != null && MovingCube.LastCube.gameObject != GameObject.Find("Base"))
-            cube.transform.position = new Vector3(transform.position.x, transform.position.y, MovingCube.LastCube.transform.position.z + cubePrefab.transform.localScale.z);
-        else
-            cube.transform.position = transform.position;
+        if(MovingCube.LastCube != null)
+        {
+            posX = posX == -4 ? 4 : -4;
+            cube.transform.position = new Vector3(posX, transform.position.y, MovingCube.LastCube.transform.position.z + cubePrefab.transform.localScale.z);
+        }
+        moveDirection = moveDirection == MoveDirection.plusX ? MoveDirection.minusX : MoveDirection.plusX;
+        cube.MoveDirection = moveDirection;
     }
 
     private void OnDrawGizmos()

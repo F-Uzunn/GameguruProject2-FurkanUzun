@@ -5,18 +5,12 @@ using UnityEngine;
 public class GameManager : InstanceManager<GameManager>
 {
     public bool isGameOver;
-
-    void Start()
-    {
-
-    }
+    public bool isLevelCompleted;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-          
-
             if (MovingCube.CurrentCube != null)
                 MovingCube.CurrentCube.Stop();
 

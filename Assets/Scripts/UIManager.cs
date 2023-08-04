@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
@@ -24,19 +25,23 @@ public class UIManager : MonoBehaviour
 
     private void OnPassFinishLine()
     {
-        winPanel.SetActive(true);
+        Scale(winPanel, 1);
     }
 
     private void OnCreateNewLevel()
     {
-        winPanel.SetActive(false);
+        Scale(winPanel, 0);
     }
 
     private void OnGameOver()
     {
-        failPanel.SetActive(true);
+        Scale(failPanel, 1);
     }
 
+    void Scale(GameObject panel,float val)
+    {
+        panel.transform.DOScale(Vector3.one * val, 0.1f);
+    }
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

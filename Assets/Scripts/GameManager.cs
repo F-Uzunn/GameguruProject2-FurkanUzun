@@ -91,6 +91,7 @@ public class GameManager : InstanceManager<GameManager>
         }
     }
 
+    //next level buton voidi
     private void LevelBuild()
     {
         isGameStarted = false;

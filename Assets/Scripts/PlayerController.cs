@@ -50,13 +50,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Vector3 direction = Vector3.zero;
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.GetChild(0).localRotation = targetRotation;
+        if (GameManager.Instance.isLevelCompleted)
+            return;
 
         if (GameManager.Instance.isGameStarted)
         {
             transform.position += transform.forward * Time.deltaTime * speed;
+            Vector3 direction = Vector3.zero;
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.GetChild(0).localRotation = targetRotation;
         }
 
         if (moveList.Count == 0)
@@ -68,7 +70,7 @@ public class PlayerController : MonoBehaviour
         {
             if (moveList[moveIndex].GetComponent<MovingCube>() != MovingCube.CurrentCube)
             {
-                transform.DOMoveX(moveList[moveIndex].transform.position.x, 0.1f);
+                transform.DOMoveX(moveList[moveIndex].transform.position.x, 0.25f).SetEase(Ease.Linear);
                 if (moveList.Count != moveIndex+1)
                     moveIndex++;
             }

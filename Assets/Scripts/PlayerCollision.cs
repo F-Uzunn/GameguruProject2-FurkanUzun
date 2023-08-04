@@ -8,6 +8,7 @@ public class PlayerCollision : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("FinishLine"))
         {
+            collision.gameObject.tag = "Untagged";
             EventManager.Broadcast(GameEvent.OnPassFinishLine);
             Debug.Log("finish");
         }

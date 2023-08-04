@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class MovingCube : MonoBehaviour
 {
@@ -48,8 +49,6 @@ public class MovingCube : MonoBehaviour
     {
         EventManager.Broadcast(GameEvent.OnPlaySound, "combofail");
         Debug.Log("gameOver");
-        LastCube = null;
-        CurrentCube = null;
         this.gameObject.AddComponent<Rigidbody>();
         Destroy(this.gameObject, 1f);
     }
@@ -128,6 +127,7 @@ public class MovingCube : MonoBehaviour
         cube.transform.position = new Vector3(fallingBlockZPosisiton, transform.position.y, transform.position.z);
 
         cube.AddComponent<Rigidbody>();
-        Destroy(cube.gameObject, 1f);
+        cube.transform.DOScale(Vector3.zero, 1.5f).SetEase(Ease.OutCubic);
+        Destroy(cube.gameObject, 1.5f);
     }
 }

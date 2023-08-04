@@ -11,7 +11,7 @@ public class MovingCube : MonoBehaviour
 
 
     [SerializeField]
-    private float moveSpeed = 1f;
+    public float moveSpeed = 1f;
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
@@ -37,6 +37,7 @@ public class MovingCube : MonoBehaviour
     }
     private void GameOver()
     {
+        EventManager.Broadcast(GameEvent.OnPlaySound, "combofail");
         Debug.Log("gameOver");
         LastCube = null;
         CurrentCube = null;
@@ -57,6 +58,9 @@ public class MovingCube : MonoBehaviour
         SplitCubeOnX(leftOverMargin, direction);
 
         LastCube = GetComponent<MovingCube>();
+        if(GameManager.Instance.CheckIfWeClosedToFinish()==false)
+            EventManager.Broadcast(GameEvent.OnSpawnCube);
+
     }
 
     private bool CheckIfGameOver(float leftOverMargin)
@@ -64,7 +68,8 @@ public class MovingCube : MonoBehaviour
         if (Mathf.Abs(leftOverMargin) >= LastCube.transform.localScale.x)
         {
             GameOver();
-            EventManager.Broadcast(GameEvent.OnGameOver);
+            GameManager.Instance.cantSpawnCube=true;
+            //EventManager.Broadcast(GameEvent.OnGameOver);
             return true;
         }
         return false;
@@ -84,9 +89,10 @@ public class MovingCube : MonoBehaviour
             transform.localScale = new Vector3(LastCube.transform.localScale.x, transform.localScale.y, transform.localScale.z);
             transform.position = new Vector3(LastCube.transform.position.x, transform.position.y, transform.position.z);
             EventManager.Broadcast(GameEvent.OnPerfectTiming,0.5f,0.3f);
+            EventManager.Broadcast(GameEvent.OnPlaySound, "combo");
             return;
         }
-
+        EventManager.Broadcast(GameEvent.OnPlaySound, "combofail");
         float cubeEdge = transform.position.x + (newZSize / 2f * direction);
         float fallingBlockZPosition = cubeEdge + fallingBlockSize / 2f * direction;
 

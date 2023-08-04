@@ -10,6 +10,7 @@ public class GameManager : InstanceManager<GameManager>
     public bool isGameStarted;
     public bool isGameOver;
     public bool isLevelCompleted;
+    public bool cantSpawnCube;
     public CameraState cameraState;
 
     public GameObject gameCam;
@@ -45,15 +46,17 @@ public class GameManager : InstanceManager<GameManager>
 
     private void OnGameOver()
     {
-        isGameOver = true;
+        if (isGameOver == false)
+        {
+            gameCam.GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow = null;
+            isGameOver = true;
+        }
     }
-
     private void OnCreateNewLevel()
     {
         cameraState = CameraState.game;
         SetActiveCam();
     }
-
 
     private void OnPassFinishLine()
     {
@@ -62,11 +65,19 @@ public class GameManager : InstanceManager<GameManager>
         levelIndex++;
         SetActiveCam();
     }
-
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (cantSpawnCube)
+                return;
+
+            if (isGameOver)
+                return;
+
+            if (isLevelCompleted)
+                return;
+
             if (isGameStarted == false)
             {
                 isGameStarted = true;
@@ -76,34 +87,21 @@ public class GameManager : InstanceManager<GameManager>
             }
 
             if (MovingCube.CurrentCube != null)
-            {
                 MovingCube.CurrentCube.Stop();
-                if (CheckIfWeClosedToFinish())
-                    return;
-            }
-
-            if (isLevelCompleted)
-                return;
-
-            if (isGameOver)
-                return;
-
-            EventManager.Broadcast(GameEvent.OnSpawnCube);
-
-            CheckIfWeClosedToFinish();
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isGameStarted = false;
-            isLevelCompleted = false;
-            GameObject fakeFinishObj = Instantiate(finishPrefab);
-            fakeFinishObj.transform.position = finishObject.transform.parent.position;
+    private void LevelBuild()
+    {
+        isGameStarted = false;
+        isLevelCompleted = false;
+        cantSpawnCube = false;
+        GameObject fakeFinishObj = Instantiate(finishPrefab);
+        fakeFinishObj.transform.position = finishObject.transform.parent.position;
 
-            EventManager.Broadcast(GameEvent.OnCreateNewLevel);
-            finishObject.transform.parent.localPosition = new Vector3(finishObject.transform.parent.localPosition.x, finishObject.transform.parent.localPosition.y, finishObject.transform.parent.localPosition.z + (3 * levelIndex * UnityEngine.Random.Range(1, 4)));
-
-        }
+        EventManager.Broadcast(GameEvent.OnCreateNewLevel);
+        Debug.Log(finishObject.transform.parent.name);
+        finishObject.transform.parent.localPosition = new Vector3(finishObject.transform.parent.localPosition.x,finishObject.transform.parent.localPosition.y, finishObject.transform.parent.localPosition.z + (3 * levelIndex * UnityEngine.Random.Range(1, 4)));
     }
 
     public bool CheckIfWeClosedToFinish()
@@ -111,11 +109,13 @@ public class GameManager : InstanceManager<GameManager>
         if (MovingCube.CurrentCube != null)
         {
             if (finishObject.transform.position.z - MovingCube.CurrentCube.transform.position.z < 3)
+            {
+                cantSpawnCube = true;
                 return true;
+            }
         }
         return false;
     }
-
     void SetActiveCam()
     {
         switch (cameraState)

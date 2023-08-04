@@ -63,13 +63,9 @@ public class PlayerController : MonoBehaviour
             return;
 
         if (moveList[moveIndex] != null)
-        {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(moveList[moveIndex].transform.position.x, transform.position.y, moveList[moveIndex].transform.position.z), speed * Time.deltaTime);
-        }
         else
-        {
             moveForward = true;
-        }
 
         if (GetDistance() < 0.75f)
         {

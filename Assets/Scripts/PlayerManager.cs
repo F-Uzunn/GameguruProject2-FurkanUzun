@@ -36,4 +36,10 @@ public class PlayerManager : MonoBehaviour
     {
         _playerAnim.SetTrigger(animString);
     }
+
+    private void Update()
+    {
+        if (transform.position.y < -2f)
+            EventManager.Broadcast(GameEvent.OnGameOver);
+    }
 }

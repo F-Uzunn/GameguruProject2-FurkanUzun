@@ -10,7 +10,8 @@ public enum GameEvent
     OnPassFinishLine,
     OnPerfectTiming,
     OnCreateNewLevel,
-    OnStartNewLevel
+    OnStartNewLevel,
+    OnPlaySound
 }
 public static class EventManager
 {

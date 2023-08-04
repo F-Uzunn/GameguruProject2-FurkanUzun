@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,14 +17,14 @@ public class PlayerController : MonoBehaviour
     {
         EventManager.AddHandler(GameEvent.OnAddStackToMoveList, OnAddStackToMoveList);
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
-        EventManager.AddHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.AddHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnAddStackToMoveList, OnAddStackToMoveList);
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
-        EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
 
     void OnAddStackToMoveList(object cube)
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviour
         moveList.Add(cubeTrans.transform);
     }
 
-    void OnStartNewLevel()
+    void OnCreateNewLevel()
     {
         speed = 1f;
     }
@@ -42,10 +43,16 @@ public class PlayerController : MonoBehaviour
         moveList.Clear();
         moveIndex = 0;
         moveForward = false;
+        transform.GetChild(0).DORotate(Vector3.zero, 0.1f);
+        transform.DOMoveX(0, 0.1f);
     }
 
     void Update()
     {
+        Vector3 direction = Vector3.zero;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.GetChild(0).localRotation = targetRotation;
+
         if (moveForward)
         {
             transform.position += transform.forward * Time.deltaTime * speed;
@@ -56,10 +63,14 @@ public class PlayerController : MonoBehaviour
             return;
 
         if (moveList[moveIndex] != null)
+        {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(moveList[moveIndex].transform.position.x, transform.position.y, moveList[moveIndex].transform.position.z), speed * Time.deltaTime);
+        }
         else
+        {
             moveForward = true;
-        
+        }
+
         if (GetDistance() < 0.75f)
         {
             if (moveList.Count - 1 == moveIndex)

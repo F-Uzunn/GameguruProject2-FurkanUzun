@@ -9,6 +9,7 @@ public enum GameEvent
     OnAddStackToMoveList,
     OnPassFinishLine,
     OnPerfectTiming,
+    OnCreateNewLevel,
     OnStartNewLevel
 }
 public static class EventManager

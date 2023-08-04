@@ -7,12 +7,15 @@ public class GameManager : InstanceManager<GameManager>
 {
     public GameObject finishPrefab;
     public GameObject finishObject;
+    public bool isGameStarted;
     public bool isGameOver;
     public bool isLevelCompleted;
     public CameraState cameraState;
 
     public GameObject gameCam;
     public GameObject orbitCam;
+
+    public int levelIndex;
     public enum CameraState
     {
         game,
@@ -23,14 +26,14 @@ public class GameManager : InstanceManager<GameManager>
     {
         EventManager.AddHandler(GameEvent.OnGameOver, OnGameOver);
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
-        EventManager.AddHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.AddHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnGameOver, OnGameOver);
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
-        EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
 
     private void Awake()
@@ -45,7 +48,7 @@ public class GameManager : InstanceManager<GameManager>
         isGameOver = true;
     }
 
-    private void OnStartNewLevel()
+    private void OnCreateNewLevel()
     {
         cameraState = CameraState.game;
         SetActiveCam();
@@ -56,6 +59,7 @@ public class GameManager : InstanceManager<GameManager>
     {
         isLevelCompleted = true;
         cameraState = CameraState.orbit;
+        levelIndex++;
         SetActiveCam();
     }
 
@@ -63,6 +67,14 @@ public class GameManager : InstanceManager<GameManager>
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (isGameStarted == false)
+            {
+                isGameStarted = true;
+                EventManager.Broadcast(GameEvent.OnSpawnCube);
+                EventManager.Broadcast(GameEvent.OnStartNewLevel);
+                return;
+            }
+
             if (MovingCube.CurrentCube != null)
             {
                 MovingCube.CurrentCube.Stop();
@@ -83,10 +95,14 @@ public class GameManager : InstanceManager<GameManager>
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            isGameStarted = false;
             isLevelCompleted = false;
-            GameObject finishObj = Instantiate(finishPrefab);
-            finishObj.transform.position = finishObject.transform.parent.position;
-            EventManager.Broadcast(GameEvent.OnStartNewLevel);
+            GameObject fakeFinishObj = Instantiate(finishPrefab);
+            fakeFinishObj.transform.position = finishObject.transform.parent.position;
+
+            EventManager.Broadcast(GameEvent.OnCreateNewLevel);
+            finishObject.transform.parent.localPosition = new Vector3(finishObject.transform.parent.localPosition.x, finishObject.transform.parent.localPosition.y, finishObject.transform.parent.localPosition.z + (3 * levelIndex * UnityEngine.Random.Range(1, 4)));
+
         }
     }
 

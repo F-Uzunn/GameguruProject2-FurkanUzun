@@ -3837,11 +3837,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   finishPrefab: {fileID: 3412178013962298331, guid: 8890cf30caa1e414ebf78f564350d751, type: 3}
   finishObject: {fileID: 8552149844538228370}
+  isGameStarted: 0
   isGameOver: 0
   isLevelCompleted: 0
   cameraState: 0
   gameCam: {fileID: 1689421170}
   orbitCam: {fileID: 1034005750}
+  levelIndex: 0
 --- !u!4 &1083687400
 Transform:
   m_ObjectHideFlags: 0

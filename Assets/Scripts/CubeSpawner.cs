@@ -18,13 +18,13 @@ public class CubeSpawner : MonoBehaviour
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnSpawnCube,OnSpawnCube);
-        EventManager.AddHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.AddHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnSpawnCube,OnSpawnCube);
-        EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
+        EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
     public void OnSpawnCube()
     {
@@ -41,11 +41,12 @@ public class CubeSpawner : MonoBehaviour
         cube.MoveDirection = moveDirection;
     }
 
-    private void OnStartNewLevel()
+    private void OnCreateNewLevel()
     {
         for (int i = 2; i < transform.childCount; i++)
         {
-            transform.GetChild(i).DOScale(Vector3.zero, 0.1f).OnComplete(() => { Destroy(transform.GetChild(i).gameObject); });
+            transform.GetChild(i).DOScale(Vector3.zero, 0.1f);
+            Destroy(transform.GetChild(i).gameObject, 0.1f);
         }
         transform.DOScale(Vector3.zero, 0f);
         transform.DOMove(new Vector3(transform.position.x, transform.position.y, GameManager.Instance.finishObject.transform.parent.position.z + 2.39708f), 0.1f).SetDelay(0.1f).OnComplete(()=> 

@@ -14,6 +14,8 @@ public class MovingCube : MonoBehaviour
     private float moveSpeed = 1f;
     private void OnEnable()
     {
+        EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
+
         if (LastCube == null)
             LastCube = GameObject.Find("Base").GetComponent<MovingCube>();
 
@@ -24,7 +26,15 @@ public class MovingCube : MonoBehaviour
 
         transform.localScale = new Vector3(LastCube.transform.localScale.x, LastCube.transform.localScale.y, transform.localScale.z);
     }
-
+    private void OnDisable()
+    {
+        EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
+    }
+    private void OnPassFinishLine()
+    {
+        LastCube = null;
+        CurrentCube = null;
+    }
     private void GameOver()
     {
         Debug.Log("gameOver");
@@ -73,7 +83,7 @@ public class MovingCube : MonoBehaviour
         {
             transform.localScale = new Vector3(LastCube.transform.localScale.x, transform.localScale.y, transform.localScale.z);
             transform.position = new Vector3(LastCube.transform.position.x, transform.position.y, transform.position.z);
-            Debug.Log("perfect timing");
+            EventManager.Broadcast(GameEvent.OnPerfectTiming,0.5f,0.3f);
             return;
         }
 

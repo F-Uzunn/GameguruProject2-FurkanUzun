@@ -15,17 +15,33 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnAddStackToMoveList, OnAddStackToMoveList);
+        EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
+        EventManager.AddHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnAddStackToMoveList, OnAddStackToMoveList);
+        EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
+        EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
     }
 
     void OnAddStackToMoveList(object cube)
     {
         GameObject cubeTrans = (GameObject)cube;
         moveList.Add(cubeTrans.transform);
+    }
+
+    void OnStartNewLevel()
+    {
+        speed = 1f;
+    }
+    void OnPassFinishLine()
+    {
+        speed = 0;
+        moveList.Clear();
+        moveIndex = 0;
+        moveForward = false;
     }
 
     void Update()

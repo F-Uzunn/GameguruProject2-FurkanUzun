@@ -6,7 +6,10 @@ public enum GameEvent
 {
     OnSpawnCube,
     OnGameOver,
-    OnAddStackToMoveList
+    OnAddStackToMoveList,
+    OnPassFinishLine,
+    OnPerfectTiming,
+    OnStartNewLevel
 }
 public static class EventManager
 {

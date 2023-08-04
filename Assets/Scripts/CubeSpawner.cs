@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CubeSpawner : MonoBehaviour
 {
@@ -17,11 +18,13 @@ public class CubeSpawner : MonoBehaviour
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnSpawnCube,OnSpawnCube);
+        EventManager.AddHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnSpawnCube,OnSpawnCube);
+        EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
     }
     public void OnSpawnCube()
     {
@@ -36,6 +39,19 @@ public class CubeSpawner : MonoBehaviour
         }
         moveDirection = moveDirection == MoveDirection.plusX ? MoveDirection.minusX : MoveDirection.plusX;
         cube.MoveDirection = moveDirection;
+    }
+
+    private void OnStartNewLevel()
+    {
+        for (int i = 2; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).DOScale(Vector3.zero, 0.1f).OnComplete(() => { Destroy(transform.GetChild(i).gameObject); });
+        }
+        transform.DOScale(Vector3.zero, 0f);
+        transform.DOMove(new Vector3(transform.position.x, transform.position.y, GameManager.Instance.finishObject.transform.parent.position.z + 2.39708f), 0.1f).SetDelay(0.1f).OnComplete(()=> 
+        {
+            transform.DOScale(Vector3.one, 0.1f);
+        });
     }
 
     private void OnDrawGizmos()

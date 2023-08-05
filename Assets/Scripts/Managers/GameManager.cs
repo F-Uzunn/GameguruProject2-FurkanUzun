@@ -18,7 +18,9 @@ public class GameManager : InstanceManager<GameManager>
     public CameraState cameraState;
 
     public int levelIndex;
-   
+
+
+    #region Events
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnGameOver, OnGameOver);
@@ -32,14 +34,14 @@ public class GameManager : InstanceManager<GameManager>
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
         EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
-
+    #endregion
     private void Awake()
     {
         finishObject = GameObject.FindGameObjectWithTag("FinishLine");
         cameraState = CameraState.game;
         SetActiveCam();
     }
-
+    #region EventsMethods
     private void OnGameOver()
     {
         if (isGameOver == false)
@@ -61,6 +63,8 @@ public class GameManager : InstanceManager<GameManager>
         levelIndex++;
         SetActiveCam();
     }
+    #endregion
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -81,6 +85,7 @@ public class GameManager : InstanceManager<GameManager>
         }
     }
 
+    #region Voids
     //next level buton voidi
     private void LevelBuild()
     {
@@ -140,4 +145,5 @@ public class GameManager : InstanceManager<GameManager>
                 break;
         }
     }
+    #endregion
 }

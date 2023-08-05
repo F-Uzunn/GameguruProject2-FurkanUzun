@@ -10,12 +10,9 @@ public class MovingCube : MonoBehaviour
     public static MovingCube LastCube { get; private set; }
     public MoveDirection MoveDirection { get; set; }
 
-
     [SerializeField]
     public float moveSpeed = 1f;
 
-
-    #region Awake
     private void Awake()
     {
         if (GameManager.Instance.isGameStarted == false)
@@ -24,7 +21,6 @@ public class MovingCube : MonoBehaviour
             CurrentCube = null;
         }
     }
-    #endregion
 
     #region Events
     private void OnEnable()
@@ -102,8 +98,6 @@ public class MovingCube : MonoBehaviour
 
         SpawnFallingCube(fallingBlockZPosition, fallingBlockSize);
     }
-  
-
     private void SpawnFallingCube(float fallingBlockZPosisiton, float fallingBlockSize)
     {
         var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -116,5 +110,4 @@ public class MovingCube : MonoBehaviour
         Destroy(cube.gameObject, 1.5f);
     }
     #endregion
-
 }

@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
 {
     public GameObject failPanel;
     public GameObject winPanel;
+
+    #region Events
     void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnGameOver, OnGameOver);
@@ -22,7 +24,9 @@ public class UIManager : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
     }
+    #endregion
 
+    #region EventMethods
     private void OnPassFinishLine()
     {
         Scale(winPanel, 1);
@@ -37,7 +41,10 @@ public class UIManager : MonoBehaviour
     {
         Scale(failPanel, 1);
     }
+    #endregion
 
+
+    #region Voids
     void Scale(GameObject panel,float val)
     {
         panel.transform.DOScale(Vector3.one * val, 0.1f);
@@ -46,4 +53,5 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    #endregion
 }

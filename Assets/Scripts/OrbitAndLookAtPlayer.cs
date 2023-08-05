@@ -30,7 +30,6 @@ public class OrbitAndLookAtPlayer : MonoBehaviour
             }
         }
     }
-
     private void Update()
     {
         orbitalTransposer.m_XAxis.Value += Time.deltaTime * orbitalTransposer.m_XAxis.m_MaxSpeed;

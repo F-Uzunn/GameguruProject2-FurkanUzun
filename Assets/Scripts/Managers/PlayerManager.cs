@@ -7,6 +7,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private Animator _playerAnim;
 
+    #region Events
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
@@ -19,11 +20,12 @@ public class PlayerManager : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
         EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
+    #endregion
     void Start()
     {
         _playerAnim = transform.GetChild(0).GetComponent<Animator>();
     }
-
+    #region EventMethods
     void OnStartNewLevel()
     {
         AnimSet("run");
@@ -38,6 +40,7 @@ public class PlayerManager : MonoBehaviour
     {
         AnimSet("dance");
     }
+    #endregion
 
     void AnimSet(string animString)
     {

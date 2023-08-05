@@ -11,7 +11,8 @@ public enum GameEvent
     OnPerfectTiming,
     OnCreateNewLevel,
     OnStartNewLevel,
-    OnPlaySound
+    OnPlaySound,
+    OnParticlePlay,
 }
 public static class EventManager
 {

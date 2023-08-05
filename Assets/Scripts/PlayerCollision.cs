@@ -12,4 +12,24 @@ public class PlayerCollision : MonoBehaviour
             Debug.Log("finish");
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.GetComponent<Particle>().particleState)
+        {
+            case ParticleState.star:
+                EventManager.Broadcast(GameEvent.OnParticlePlay, "Star",other.transform.localPosition);
+                Destroy(other.gameObject);
+                break;
+            case ParticleState.diamond:
+                EventManager.Broadcast(GameEvent.OnParticlePlay, "Diamond", other.transform.localPosition);
+                Destroy(other.gameObject);
+                break;
+            case ParticleState.gold:
+                EventManager.Broadcast(GameEvent.OnParticlePlay, "Gold", other.transform.localPosition);
+                Destroy(other.gameObject);
+                break;
+            default:
+                break;
+        }
+    }
 }

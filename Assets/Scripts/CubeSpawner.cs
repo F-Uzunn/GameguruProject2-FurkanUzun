@@ -14,7 +14,10 @@ public class CubeSpawner : MonoBehaviour
     private int posX;
 
     public List<Material> cubeMaterialList;
+    public List<GameObject> collectablesList;
 
+
+    #region Events
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnSpawnCube,OnSpawnCube);
@@ -26,6 +29,9 @@ public class CubeSpawner : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnSpawnCube,OnSpawnCube);
         EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
+    #endregion
+
+    #region EventMethods
     public void OnSpawnCube()
     {
         var cube = Instantiate(cubePrefab, parent);
@@ -39,6 +45,15 @@ public class CubeSpawner : MonoBehaviour
         }
         moveDirection = moveDirection == MoveDirection.plusX ? MoveDirection.minusX : MoveDirection.plusX;
         cube.MoveDirection = moveDirection;
+
+        int x = Random.Range(0, 1);
+        if (x == 0)
+        {
+            ParticleManager particleManager = FindObjectOfType<ParticleManager>();
+            GameObject particle = Instantiate(particleManager.OnGetParticleObject());
+            particle.GetComponent<Particle>().lerpTransform = MovingCube.CurrentCube.transform;
+            particle.transform.localPosition = MovingCube.CurrentCube.transform.localPosition;
+        }
     }
 
     private void OnCreateNewLevel()
@@ -54,7 +69,7 @@ public class CubeSpawner : MonoBehaviour
             transform.DOScale(Vector3.one, 0.1f);
         });
     }
-
+    #endregion
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;

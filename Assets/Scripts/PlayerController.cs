@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float speed;
 
+    #region Events
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnAddStackToMoveList, OnAddStackToMoveList);
@@ -24,7 +25,9 @@ public class PlayerController : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
         EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
+    #endregion
 
+    #region EventMethods
     void OnAddStackToMoveList(object cube)
     {
         GameObject cubeTrans = (GameObject)cube;
@@ -43,7 +46,7 @@ public class PlayerController : MonoBehaviour
         transform.GetChild(0).DORotate(Vector3.zero, 0.1f);
         transform.DOMoveX(0, 0.1f);
     }
-
+    #endregion
     void Update()
     {
         if (GameManager.Instance.isGameStarted)

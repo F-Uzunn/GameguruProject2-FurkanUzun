@@ -40,22 +40,26 @@ public class ParticleManager : MonoBehaviour
                 Destroy(particleObj.gameObject, 2f);
                 particleObj.Play();
                 break;
+
             case "Diamond":
                 particleObj = Instantiate(diamondParticle, pos, Quaternion.identity);
                 Destroy(particleObj.gameObject, 2f);
                 particleObj.Play();
                 break;
+
             case "Gold":
                 particleObj = Instantiate(goldParticle, pos, Quaternion.identity);
                 Destroy(particleObj.gameObject, 2f);
                 particleObj.Play();
                 break;
+
             case "Combo":
                 particleObj = Instantiate(comboParticleObjectList[UnityEngine.Random.Range(0, comboParticleObjectList.Count)].GetComponent<ParticleSystem>(), pos, Quaternion.Euler(-90,0,0));
                 particleObj.transform.position += new Vector3(0, 0.5f, -1.5f);
                 Destroy(particleObj.gameObject, 2f);
                 particleObj.Play();
                 break;
+
             default:
                 break;
         }

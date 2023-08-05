@@ -5,6 +5,9 @@ using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    private GameManager gameManager;
+
     public List<Transform> moveList;
     [SerializeField]
     private int moveIndex;
@@ -26,6 +29,11 @@ public class PlayerController : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
     }
     #endregion
+
+    private void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
 
     #region EventMethods
     void OnAddStackToMoveList(object cube)
@@ -50,7 +58,7 @@ public class PlayerController : MonoBehaviour
     #endregion
     void Update()
     {
-        if (GameManager.Instance.isGameStarted)
+        if (gameManager.isGameStarted)
         {
             transform.position += transform.forward * Time.deltaTime * speed;
             transform.GetChild(0).localRotation = Quaternion.Euler(Vector3.zero);
@@ -61,10 +69,11 @@ public class PlayerController : MonoBehaviour
 
         if (GetDistance() < 2.75f)
         {
-            if (moveList[moveIndex].GetComponent<MovingCube>() != MovingCube.CurrentCube || GameManager.Instance.cantClick)
+            if (moveList[moveIndex].GetComponent<MovingCube>() != MovingCube.CurrentCube || gameManager.cantClick)
             {
-                if (MovingCube.CurrentCube.isFallingCube)
+                if (MovingCube.CurrentCube == moveList[moveIndex].GetComponent<MovingCube>())
                     return;
+
                 transform.DOMoveX(moveList[moveIndex].transform.position.x, 0.75f).SetEase(Ease.Linear);
                 if (moveList.Count != moveIndex+1)
                     moveIndex++;

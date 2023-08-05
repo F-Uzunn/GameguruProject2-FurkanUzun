@@ -44,20 +44,24 @@ public class AudioManager : MonoBehaviour
                 comboAudioSource.clip = comboClip;
                 comboAudioSource.Play();
                 break;
+
             case "combofail":
                 lastPitchVal = 1;
                 comboAudioSource.pitch = lastPitchVal;
                 comboAudioSource.clip = (comboFailClips[UnityEngine.Random.Range(0,comboFailClips.Count)]);
                 comboAudioSource.Play();
                 break;
+
             case "collect":
                 gameAudioSource.clip = collectClip;
                 gameAudioSource.Play();
                 break;
+
             case "win":
                 gameAudioSource.clip = winClip;
                 gameAudioSource.Play();
                 break;
+
             case "fail":
                 gameAudioSource.clip = failClip;
                 gameAudioSource.Play();

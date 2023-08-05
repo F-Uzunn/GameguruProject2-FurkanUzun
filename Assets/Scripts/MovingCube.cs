@@ -93,6 +93,7 @@ public class MovingCube : MonoBehaviour
             EventManager.Broadcast(GameEvent.OnPlaySound, "combo");
             return;
         }
+
         EventManager.Broadcast(GameEvent.OnPlaySound, "combofail");
         float cubeEdge = transform.position.x + (newZSize / 2f * direction);
         float fallingBlockZPosition = cubeEdge + fallingBlockSize / 2f * direction;

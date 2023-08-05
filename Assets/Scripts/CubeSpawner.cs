@@ -64,10 +64,10 @@ public class CubeSpawner : MonoBehaviour
             Destroy(transform.GetChild(i).gameObject, 0.1f);
         }
         transform.DOScale(Vector3.zero, 0.01f);
-        transform.DOMove(new Vector3(transform.position.x, transform.position.y, GameManager.Instance.finishObject.transform.parent.position.z + 2.39708f), 0f).SetDelay(0.1f).OnComplete(()=> 
-        {
-            transform.DOScale(Vector3.one, 0.1f);
-        });
+        transform.DOMove(new Vector3(transform.position.x,
+            transform.position.y,
+            GameManager.Instance.finishObject.transform.parent.position.z + 2.39708f), 0f)
+           .SetDelay(0.1f).OnComplete(()=> {transform.DOScale(Vector3.one, 0.1f); });
     }
     #endregion
     private void OnDrawGizmos()

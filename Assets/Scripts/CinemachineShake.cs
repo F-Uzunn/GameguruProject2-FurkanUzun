@@ -8,8 +8,6 @@ public class CinemachineShake : MonoBehaviour
     public CinemachineVirtualCamera cinemachineVirtualCamera;
     public CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
     public float shakeTimer;
-    // Start is called before the first frame update
-
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnPerfectTiming, OnPerfectTiming);
@@ -31,7 +29,6 @@ public class CinemachineShake : MonoBehaviour
         cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
         shakeTimer = time;
     }
-    // Update is called once per frame
     void Update()
     {
         if (shakeTimer > 0f)

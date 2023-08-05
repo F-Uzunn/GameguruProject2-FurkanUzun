@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public GameObject failPanel;
     public GameObject winPanel;
     public GameObject gamePanel;
+    public GameObject taptoPlayTutObject;
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
@@ -22,6 +23,7 @@ public class UIManager : MonoBehaviour
     {
         EventManager.AddHandler(GameEvent.OnGameOver, OnGameOver);
         EventManager.AddHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
+        EventManager.AddHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
         EventManager.AddHandler(GameEvent.OnScore, OnScore);
     }
@@ -30,20 +32,23 @@ public class UIManager : MonoBehaviour
     {
         EventManager.RemoveHandler(GameEvent.OnGameOver, OnGameOver);
         EventManager.RemoveHandler(GameEvent.OnCreateNewLevel, OnCreateNewLevel);
+        EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
         EventManager.RemoveHandler(GameEvent.OnScore, OnScore);
     }
     #endregion
-
-    #region EventMethods
-
     private void Start()
     {
         scoreIndex = 0;
         UpdateTexts();
     }
+
+    #region EventMethods
+
+
     private void OnPassFinishLine()
     {
+        EventManager.Broadcast(GameEvent.OnPlaySound, "win");
         gamePanel.SetActive(false);
         Scale(winPanel, 1);
     }
@@ -54,7 +59,13 @@ public class UIManager : MonoBehaviour
         scoreIndex = 0;
         UpdateTexts();
         gamePanel.SetActive(true);
+        taptoPlayTutObject.SetActive(true);
         Scale(winPanel, 0);
+    }
+
+    private void OnStartNewLevel()
+    {
+        taptoPlayTutObject.SetActive(false);
     }
 
     private void OnGameOver()

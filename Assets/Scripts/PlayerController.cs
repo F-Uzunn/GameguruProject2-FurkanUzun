@@ -63,6 +63,8 @@ public class PlayerController : MonoBehaviour
         {
             if (moveList[moveIndex].GetComponent<MovingCube>() != MovingCube.CurrentCube || GameManager.Instance.cantClick)
             {
+                if (MovingCube.CurrentCube.isFallingCube)
+                    return;
                 transform.DOMoveX(moveList[moveIndex].transform.position.x, 0.75f).SetEase(Ease.Linear);
                 if (moveList.Count != moveIndex+1)
                     moveIndex++;

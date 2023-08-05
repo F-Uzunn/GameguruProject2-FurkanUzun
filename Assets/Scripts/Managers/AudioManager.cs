@@ -5,18 +5,14 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField]
-    private AudioSource comboAudioSource;
-    [SerializeField]
-    private AudioSource gameAudioSource;
-    [SerializeField]
-    private AudioClip comboClip;
-    [SerializeField]
-    private AudioClip collectClip;
-    [SerializeField]
-    private List<AudioClip> comboFailClips;
-    [SerializeField]
-    private float lastPitchVal;
+    public AudioSource comboAudioSource;
+    public AudioSource gameAudioSource;
+    public AudioClip comboClip;
+    public AudioClip collectClip;
+    public AudioClip winClip;
+    public AudioClip failClip;
+    public List<AudioClip> comboFailClips;
+    public float lastPitchVal;
 
     #region Events
     private void OnEnable()
@@ -48,7 +44,6 @@ public class AudioManager : MonoBehaviour
                 comboAudioSource.clip = comboClip;
                 comboAudioSource.Play();
                 break;
-
             case "combofail":
                 lastPitchVal = 1;
                 comboAudioSource.pitch = lastPitchVal;
@@ -57,6 +52,14 @@ public class AudioManager : MonoBehaviour
                 break;
             case "collect":
                 gameAudioSource.clip = collectClip;
+                gameAudioSource.Play();
+                break;
+            case "win":
+                gameAudioSource.clip = winClip;
+                gameAudioSource.Play();
+                break;
+            case "fail":
+                gameAudioSource.clip = failClip;
                 gameAudioSource.Play();
                 break;
         }

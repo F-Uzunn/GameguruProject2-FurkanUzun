@@ -53,7 +53,7 @@ public class ParticleManager : MonoBehaviour
             case "Combo":
                 particleObj = Instantiate(comboParticleObjectList[UnityEngine.Random.Range(0, comboParticleObjectList.Count)].GetComponent<ParticleSystem>(), pos, Quaternion.Euler(-90,0,0));
                 particleObj.transform.position += new Vector3(0, 0.5f, -1.5f);
-                //Destroy(particleObj.gameObject, 2f);
+                Destroy(particleObj.gameObject, 2f);
                 particleObj.Play();
                 break;
             default:

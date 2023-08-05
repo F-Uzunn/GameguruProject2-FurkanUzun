@@ -10,8 +10,8 @@ public class MovingCube : MonoBehaviour
     public static MovingCube LastCube { get; private set; }
     public MoveDirection MoveDirection { get; set; }
 
-    [SerializeField]
     public float moveSpeed = 1f;
+    public bool isFallingCube;
 
     private void Awake()
     {

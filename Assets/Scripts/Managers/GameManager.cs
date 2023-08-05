@@ -49,6 +49,7 @@ public class GameManager : InstanceManager<GameManager>
     {
         if (isGameOver == false)
         {
+            EventManager.Broadcast(GameEvent.OnPlaySound, "fail");
             gameCam.GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow = null;
             isGameOver = true;
         }
@@ -94,6 +95,7 @@ public class GameManager : InstanceManager<GameManager>
     {
         isGameStarted = false;
         cantClick = false;
+        isLevelCompleted = false;
         GameObject fakeFinishObj = Instantiate(finishPrefab);
         fakeFinishObj.transform.position = finishObject.transform.parent.position;
 
@@ -128,6 +130,7 @@ public class GameManager : InstanceManager<GameManager>
     {
         cantClick = true;
         MovingCube.CurrentCube.gameObject.AddComponent<Rigidbody>();
+        MovingCube.CurrentCube.isFallingCube = true;
         Destroy(MovingCube.CurrentCube.gameObject, 1f);
         EventManager.Broadcast(GameEvent.OnPlaySound, "combofail");
     }

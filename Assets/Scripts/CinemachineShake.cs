@@ -19,7 +19,6 @@ public class CinemachineShake : MonoBehaviour
     {
         EventManager.RemoveHandler(GameEvent.OnPerfectTiming, OnPerfectTiming);
     }
- 
 
     //Camera shake voidi
     public void OnPerfectTiming(object intensityVal, object timeVal)

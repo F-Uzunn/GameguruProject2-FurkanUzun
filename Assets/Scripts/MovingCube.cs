@@ -14,6 +14,8 @@ public class MovingCube : MonoBehaviour
     [SerializeField]
     public float moveSpeed = 1f;
 
+
+    #region Awake
     private void Awake()
     {
         if (GameManager.Instance.isGameStarted == false)
@@ -22,6 +24,9 @@ public class MovingCube : MonoBehaviour
             CurrentCube = null;
         }
     }
+    #endregion
+
+    #region Events
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
@@ -40,49 +45,40 @@ public class MovingCube : MonoBehaviour
     {
         EventManager.RemoveHandler(GameEvent.OnPassFinishLine, OnPassFinishLine);
     }
+    #endregion
+
+    #region EventMethods
     private void OnPassFinishLine()
     {
         LastCube = null;
         CurrentCube = null;
     }
-    private void GameOver()
+    #endregion
+    private void Update()
     {
-        EventManager.Broadcast(GameEvent.OnPlaySound, "combofail");
-        Debug.Log("gameOver");
-        this.gameObject.AddComponent<Rigidbody>();
-        Destroy(this.gameObject, 1f);
+        if (MoveDirection == MoveDirection.plusX)
+            transform.position += -transform.right * Time.deltaTime * moveSpeed;
+        else
+            transform.position += transform.right * Time.deltaTime * moveSpeed;
     }
 
+    #region Voids
     internal void Stop()
     {
         moveSpeed = 0f;
         float leftOverMargin = transform.position.x - LastCube.transform.position.x;
-      
+        float direction = leftOverMargin > 0 ? 1f : -1f;
 
-        if (CheckIfGameOver(leftOverMargin))
+        if (GameManager.Instance.CheckIfGameOver(leftOverMargin))
             return;
 
-        float direction = leftOverMargin > 0 ? 1f : -1f;
         SplitCubeOnX(leftOverMargin, direction);
-
         LastCube = GetComponent<MovingCube>();
-        if(GameManager.Instance.CheckIfWeClosedToFinish()==false)
+
+        if(!GameManager.Instance.CheckIfWeClosedToFinish())
             EventManager.Broadcast(GameEvent.OnSpawnCube);
 
     }
-
-    private bool CheckIfGameOver(float leftOverMargin)
-    {
-        if (Mathf.Abs(leftOverMargin) >= LastCube.transform.localScale.x)
-        {
-            GameOver();
-            GameManager.Instance.cantSpawnCube=true;
-            //EventManager.Broadcast(GameEvent.OnGameOver);
-            return true;
-        }
-        return false;
-    }
-
     private void SplitCubeOnX(float leftOverMargin, float direction)
     {
         float newZSize = LastCube.transform.localScale.x - Mathf.Abs(leftOverMargin);
@@ -106,18 +102,7 @@ public class MovingCube : MonoBehaviour
 
         SpawnFallingCube(fallingBlockZPosition, fallingBlockSize);
     }
-    private void Update()
-    {
-        if (MoveDirection == MoveDirection.plusX)
-            transform.position += -transform.right * Time.deltaTime * moveSpeed;
-        else
-            transform.position += transform.right * Time.deltaTime * moveSpeed;
-
-        if (LastCube != null)
-        {
-            float leftOverMargin = transform.position.x - LastCube.transform.position.x;
-        }
-    }
+  
 
     private void SpawnFallingCube(float fallingBlockZPosisiton, float fallingBlockSize)
     {
@@ -130,4 +115,6 @@ public class MovingCube : MonoBehaviour
         cube.transform.DOScale(Vector3.zero, 1.5f).SetEase(Ease.OutCubic);
         Destroy(cube.gameObject, 1.5f);
     }
+    #endregion
+
 }

@@ -8,11 +8,8 @@ public class PlayerController : MonoBehaviour
     public List<Transform> moveList;
     [SerializeField]
     private int moveIndex;
-
     [SerializeField]
     private float speed;
-
-    public bool moveForward;
 
     private void OnEnable()
     {
@@ -43,16 +40,12 @@ public class PlayerController : MonoBehaviour
         speed = 0;
         moveList.Clear();
         moveIndex = 0;
-        moveForward = false;
         transform.GetChild(0).DORotate(Vector3.zero, 0.1f);
         transform.DOMoveX(0, 0.1f);
     }
 
     void Update()
     {
-        if (GameManager.Instance.isLevelCompleted)
-            return;
-
         if (GameManager.Instance.isGameStarted)
         {
             transform.position += transform.forward * Time.deltaTime * speed;
@@ -63,8 +56,6 @@ public class PlayerController : MonoBehaviour
 
         if (moveList.Count == 0)
             return;
-
-        Debug.Log(GetDistance());
 
         if (GetDistance() < 2.75f)
         {

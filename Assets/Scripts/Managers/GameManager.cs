@@ -7,22 +7,18 @@ public class GameManager : InstanceManager<GameManager>
 {
     public GameObject finishPrefab;
     public GameObject finishObject;
-    public bool isGameStarted;
-    public bool isGameOver;
-    public bool isLevelCompleted;
-    public bool cantSpawnCube;
-    public CameraState cameraState;
-
     public GameObject gameCam;
     public GameObject orbitCam;
 
-    public int levelIndex;
-    public enum CameraState
-    {
-        game,
-        orbit
-    }
+    public bool isGameStarted;
+    public bool isGameOver;
+    public bool isLevelCompleted;
+    public bool cantClick;
 
+    public CameraState cameraState;
+
+    public int levelIndex;
+   
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnGameOver, OnGameOver);
@@ -69,13 +65,7 @@ public class GameManager : InstanceManager<GameManager>
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (cantSpawnCube)
-                return;
-
-            if (isGameOver)
-                return;
-
-            if (isLevelCompleted)
+            if (cantClick)
                 return;
 
             if (isGameStarted == false)
@@ -95,13 +85,11 @@ public class GameManager : InstanceManager<GameManager>
     private void LevelBuild()
     {
         isGameStarted = false;
-        isLevelCompleted = false;
-        cantSpawnCube = false;
+        cantClick = false;
         GameObject fakeFinishObj = Instantiate(finishPrefab);
         fakeFinishObj.transform.position = finishObject.transform.parent.position;
 
         EventManager.Broadcast(GameEvent.OnCreateNewLevel);
-        Debug.Log(finishObject.transform.parent.name);
         finishObject.transform.parent.localPosition = new Vector3(finishObject.transform.parent.localPosition.x,finishObject.transform.parent.localPosition.y, finishObject.transform.parent.localPosition.z + (3 * levelIndex * UnityEngine.Random.Range(1, 4)));
     }
 
@@ -111,12 +99,31 @@ public class GameManager : InstanceManager<GameManager>
         {
             if (finishObject.transform.position.z - MovingCube.CurrentCube.transform.position.z < 3)
             {
-                cantSpawnCube = true;
+                cantClick = true;
                 return true;
             }
         }
         return false;
     }
+
+    public bool CheckIfGameOver(float leftOverMargin)
+    {
+        if (Mathf.Abs(leftOverMargin) >= MovingCube.LastCube.transform.localScale.x)
+        {
+            GameOver();
+            return true;
+        }
+        return false;
+    }
+
+    private void GameOver()
+    {
+        cantClick = true;
+        MovingCube.CurrentCube.gameObject.AddComponent<Rigidbody>();
+        Destroy(MovingCube.CurrentCube.gameObject, 1f);
+        EventManager.Broadcast(GameEvent.OnPlaySound, "combofail");
+    }
+
     void SetActiveCam()
     {
         switch (cameraState)

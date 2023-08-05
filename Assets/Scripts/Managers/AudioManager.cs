@@ -6,11 +6,17 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     [SerializeField]
-    private AudioSource audioSource;
+    private AudioSource comboAudioSource;
+    [SerializeField]
+    private AudioSource gameAudioSource;
     [SerializeField]
     private AudioClip comboClip;
     [SerializeField]
+    private AudioClip collectClip;
+    [SerializeField]
     private List<AudioClip> comboFailClips;
+    [SerializeField]
+    private float lastPitchVal;
 
     #region Events
     private void OnEnable()
@@ -25,9 +31,10 @@ public class AudioManager : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnStartNewLevel, OnStartNewLevel);
     }
     #endregion
+    
     private void OnStartNewLevel()
     {
-        audioSource.pitch = 1;
+        comboAudioSource.pitch = 1;
     }
     #region EventsMethods
     private void OnPlaySound(object clipName)
@@ -36,15 +43,21 @@ public class AudioManager : MonoBehaviour
         switch (clip)
         {
             case "combo":
-                audioSource.pitch += 0.1f;
-                audioSource.clip = comboClip;
-                audioSource.Play();
+                lastPitchVal += 0.1f;
+                comboAudioSource.pitch = lastPitchVal;
+                comboAudioSource.clip = comboClip;
+                comboAudioSource.Play();
                 break;
 
             case "combofail":
-                audioSource.pitch = 1;
-                audioSource.clip = (comboFailClips[UnityEngine.Random.Range(0,comboFailClips.Count)]);
-                audioSource.Play();
+                lastPitchVal = 1;
+                comboAudioSource.pitch = lastPitchVal;
+                comboAudioSource.clip = (comboFailClips[UnityEngine.Random.Range(0,comboFailClips.Count)]);
+                comboAudioSource.Play();
+                break;
+            case "collect":
+                gameAudioSource.clip = collectClip;
+                gameAudioSource.Play();
                 break;
         }
     }
@@ -52,6 +65,6 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        lastPitchVal = 1;
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 using Cinemachine;
 public class GameManager : InstanceManager<GameManager>
 {
+    public GameData gamedata;
+
     public GameObject finishPrefab;
     public GameObject finishObject;
     public GameObject gameCam;
@@ -37,6 +39,7 @@ public class GameManager : InstanceManager<GameManager>
     #endregion
     private void Awake()
     {
+        gamedata.Reset();
         finishObject = GameObject.FindGameObjectWithTag("FinishLine");
         cameraState = CameraState.game;
         SetActiveCam();

@@ -70,6 +70,7 @@ public class MovingCube : MonoBehaviour
 
         SplitCubeOnX(leftOverMargin, direction);
         LastCube = GetComponent<MovingCube>();
+        EventManager.Broadcast(GameEvent.OnScore);
 
         if(!GameManager.Instance.CheckIfWeClosedToFinish())
             EventManager.Broadcast(GameEvent.OnSpawnCube);

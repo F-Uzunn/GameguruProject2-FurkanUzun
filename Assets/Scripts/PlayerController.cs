@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
 
     void OnCreateNewLevel()
     {
+        transform.DOMoveX(0, 0.25f);
+        transform.DOMoveZ(transform.position.z+2, 0.25f);
         speed = 1f;
     }
     void OnPassFinishLine()
@@ -43,8 +45,7 @@ public class PlayerController : MonoBehaviour
         speed = 0;
         moveList.Clear();
         moveIndex = 0;
-        transform.GetChild(0).DORotate(Vector3.zero, 0.1f);
-        transform.DOMoveX(0, 0.1f);
+        transform.GetChild(0).DORotate(Vector3.zero, 0.25f);
     }
     #endregion
     void Update()
@@ -52,9 +53,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.isGameStarted)
         {
             transform.position += transform.forward * Time.deltaTime * speed;
-            Vector3 direction = Vector3.zero;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.GetChild(0).localRotation = targetRotation;
+            transform.GetChild(0).localRotation = Quaternion.Euler(Vector3.zero);
         }
 
         if (moveList.Count == 0)
@@ -62,9 +61,9 @@ public class PlayerController : MonoBehaviour
 
         if (GetDistance() < 2.75f)
         {
-            if (moveList[moveIndex].GetComponent<MovingCube>() != MovingCube.CurrentCube)
+            if (moveList[moveIndex].GetComponent<MovingCube>() != MovingCube.CurrentCube || GameManager.Instance.cantClick)
             {
-                transform.DOMoveX(moveList[moveIndex].transform.position.x, 0.25f).SetEase(Ease.Linear);
+                transform.DOMoveX(moveList[moveIndex].transform.position.x, 0.75f).SetEase(Ease.Linear);
                 if (moveList.Count != moveIndex+1)
                     moveIndex++;
             }

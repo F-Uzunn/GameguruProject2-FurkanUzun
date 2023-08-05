@@ -13,6 +13,7 @@ public enum GameEvent
     OnStartNewLevel,
     OnPlaySound,
     OnParticlePlay,
+    OnScore
 }
 public static class EventManager
 {

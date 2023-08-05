@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8a9ec4c91a5ed4f83f346b2804feea, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  rooms: []
+  levelIndex: 1

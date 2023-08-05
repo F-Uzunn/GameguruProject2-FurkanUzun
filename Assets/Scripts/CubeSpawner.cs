@@ -46,13 +46,13 @@ public class CubeSpawner : MonoBehaviour
         moveDirection = moveDirection == MoveDirection.plusX ? MoveDirection.minusX : MoveDirection.plusX;
         cube.MoveDirection = moveDirection;
 
-        int x = Random.Range(0, 1);
+        int x = Random.Range(0, 3);
         if (x == 0)
         {
             ParticleManager particleManager = FindObjectOfType<ParticleManager>();
             GameObject particle = Instantiate(particleManager.OnGetParticleObject());
             particle.GetComponent<Particle>().lerpTransform = MovingCube.CurrentCube.transform;
-            particle.transform.localPosition = MovingCube.CurrentCube.transform.localPosition;
+            particle.transform.position = MovingCube.CurrentCube.transform.position;
         }
     }
 

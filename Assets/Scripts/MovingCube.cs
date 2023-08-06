@@ -56,6 +56,9 @@ public class MovingCube : MonoBehaviour
             transform.position += -transform.right * Time.deltaTime * moveSpeed;
         else
             transform.position += transform.right * Time.deltaTime * moveSpeed;
+
+        if(transform.position.x < -4 || transform.position.x > 4)
+            MoveDirection = MoveDirection == MoveDirection.plusX ? MoveDirection.minusX : MoveDirection.plusX;
     }
 
     #region Voids
